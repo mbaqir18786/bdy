@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Prachi! 🎉</title>
+    <!-- Tailwind CSS CDN for a modern, responsive layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti library for the new "beautiful animation" on the Celebrate button -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <style>
+        /* Custom CSS Variables for easy color management */
+        :root {
+            --primary-color: #E2A3B3;
+            /* Blush Pink */
+            --secondary-color: #F5E8C7;
+            /* Cream */
+            --accent-color: #D4AF37;
+            /* Gold */
+            --text-color: #4A4A4A;
+            /* Dark Gray */
+            --bg-color: #FDF7F8;
+            /* Very Light Pink */
+        }
+
+        body {
+            /* Using web-safe fonts to prevent loading issues */
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2 {
+            /* Using web-safe fonts to prevent loading issues */
+            font-family: Georgia, serif;
+            color: var(--primary-color);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Navigation link active state */
+        .nav-link.active {
+            font-weight: 700;
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* Particle animation canvas background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Section entrance animations with more flair */
+        .animated-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+
+        .animated-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero section specific animation */
+        .hero-text {
+            animation: fadeInScale 2s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        .hero-text.welcome {
+            animation-delay: 0s;
+        }
+
+        .hero-text.name {
+            animation-delay: 0.5s;
+        }
+
+        .hero-text.message {
+            animation-delay: 1s;
+        }
+
+        @keyframes fadeInScale {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Updated Confetti Button Animation for a more elegant feel */
+        .confetti-button {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border: 1px solid var(--accent-color);
+        }
+
+        .confetti-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Card and image style for the new theme */
+        .card {
+            background-color: white;
+            box-shadow: 5px 5px 0px var(--accent-color);
+            border: 1px solid var(--text-color);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border-radius: 0.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-3px) translateX(-3px) scale(1.02);
+            box-shadow: 8px 8px 0px var(--accent-color);
+        }
+
+        /* Styles for the new image carousel */
+        .carousel-container {
+            width: 90%;
+            /* Changed to a percentage for better responsiveness */
+            max-width: 600px;
+            /* Reduced max-width for a more balanced look */
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 5px 5px 0px var(--accent-color);
+            border: 1px solid var(--text-color);
+            position: relative;
+            margin: auto;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 1s ease-in-out;
+            /* Smooth transition for slides */
+        }
+
+        .carousel-image-wrapper {
+            flex-shrink: 0;
+            width: 100%;
+            background-color: #f0f0f0;
+            /* Added a background color for letterboxing */
+            aspect-ratio: 4 / 3;
+            /* Set a common aspect ratio for consistency */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Changed to contain to show the full image */
+        }
+    </style>
+</head>
+
+<body class="bg-bg-color text-gray-800 relative">
+
+    <!-- Particle animation canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Main Content Container -->
+    <main class="relative w-full p-4 md:p-8">
+        <!-- Home Section -->
+        <!-- Min height is now 'screen' on desktop but flexible on mobile to prevent overflow -->
+        <section id="home" class="w-full flex justify-center items-center flex-col text-center p-4 md:p-8 min-h-screen">
+            <p class="text-xl sm:text-2xl md:text-3xl font-light mb-2 hero-text welcome">
+                A Timeless Celebration
+            </p>
+            <h1 class="text-6xl sm:text-7xl md:text-8xl font-bold tracking-tight mb-4 hero-text name">
+                PRACHI
+            </h1>
+            <p class="text-2xl sm:text-3xl md:text-4xl font-light max-w-3xl mx-auto mb-8 hero-text message">
+                Happy Birthday, dear one. 🎉
+            </p>
+        </section>
+
+        <!-- About Section -->
+        <section id="about"
+            class="w-full flex justify-center items-center flex-col text-center p-4 md:p-8 animated-section min-h-screen">
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">Just Something I Wanted to Say</h2>
+            <p class="text-lg sm:text-xl md:text-2xl font-light max-w-4xl mx-auto leading-relaxed card p-6 sm:p-8 md:p-10 shadow-lg italic">
+                We may not meet often or have a lot of shared moments, but from my side, I’ve always seen you as a
+                genuinely kind and graceful person someone I truly respect,trust and value as a friend(didi😅).
+                Wishing you a year full of peace, joy, and beautiful little moments.
+            </p>
+        </section>
+
+        <!-- Birthday Wishes Section -->
+        <section id="wishes-section"
+            class="w-full flex justify-center items-center flex-col text-center p-4 md:p-8 animated-section min-h-screen">
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">BIRTHDAY WISHES</h2>
+            <p class="text-lg sm:text-xl md:text-xl font-light mb-8">Here are some heartfelt wishes for the birthday girl.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 p-2 sm:p-4 max-w-6xl">
+                <div class="card p-6 sm:p-8 shadow-lg text-base sm:text-lg italic font-light">"May your year ahead be as graceful and
+                    beautiful as you are. Happy Birthday!"</div>
+                <div class="card p-6 sm:p-8 shadow-lg text-base sm:text-lg italic font-light">"Wishing you a day filled with all the
+                    happiness and joy you deserve. Happy Birthday, Prachi!"</div>
+                <div class="card p-6 sm:p-8 shadow-lg text-base sm:text-lg italic font-light">"To a wonderful person, may this new year of
+                    your life be the best one yet. Cheers!"</div>
+            </div>
+        </section>
+
+        <!-- Gallery Section (now a carousel) -->
+        <section id="gallery"
+            class="w-full flex justify-center items-center flex-col text-center p-4 md:p-8 animated-section min-h-screen">
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">GALLERY</h2>
+            <p class="text-lg sm:text-xl md:text-xl font-light mb-8">Some pics of you which I have</p>
+
+            <div class="carousel-container">
+                <div id="carousel-track" class="carousel-track">
+                    <!-- Only three images, no data-full-src attribute -->
+                    <div class="carousel-image-wrapper">
+                        <img src="./bdypic.jpg" 
+                             alt="Prachi picture 1"
+                             class="carousel-image w-full h-full object-contain card shadow-lg">
+                    </div>
+                    <div class="carousel-image-wrapper">
+                        <img src="./bdypic1.jpg" 
+                             alt="Prachi picture 2"
+                             class="carousel-image w-full h-full object-contain card shadow-lg">
+                    </div>
+                    <div class="carousel-image-wrapper">
+                        <img src="./Screenshot 2025-08-09 193348.png" 
+                             alt="Prachi picture 3"
+                             class="carousel-image w-full h-full object-contain card shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wishes Section (now 'More Wishes') -->
+        <section id="more-wishes"
+            class="w-full flex justify-center items-center flex-col text-center p-4 md:p-8 animated-section min-h-screen">
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">MORE WISHES</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 p-2 sm:p-4 max-w-6xl">
+                <div class="card p-6 sm:p-8 shadow-lg text-base sm:text-lg italic font-light">"To the kindest heart and the most beautiful
+                    soul, may your birthday be as radiant as you are."</div>
+                <div class="card p-6 sm:p-8 shadow-lg text-base sm:text-lg italic font-light">"Wishing you a day filled with laughter, love,
+                    and all the precious moments you deserve. Happy Birthday!"</div>
+                <div class="card p-6 sm:p-8 shadow-lg text-base sm:text-lg italic font-light">"Here's to a year ahead that is as graceful
+                    and inspiring as you. May all your dreams blossom."</div>
+            </div>
+        </section>
+
+        <!-- Countdown Section -->
+        <section id="countdown"
+            class="w-full flex justify-center items-center flex-col text-center p-4 md:p-8 animated-section min-h-screen">
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">BIRTHDAY COUNTDOWN</h2>
+            <div id="timer" class="text-4xl sm:text-5xl md:text-6xl font-light tracking-wide text-accent-color p-6 sm:p-8 card shadow-lg">
+                Loading...
+            </div>
+        </section>
+
+        <!-- Surprise Section -->
+        <!-- Adjusted spacing to prevent content from being pushed off-screen on mobile -->
+        <section id="surprise"
+            class="w-full flex justify-center items-center flex-col text-center p-4 md:p-8 animated-section min-h-screen">
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-8">Your Special Chapter Begins</h2>
+            <div class="max-w-2xl mx-auto">
+                <p class="text-xl sm:text-2xl md:text-3xl font-light mb-8 leading-relaxed italic">
+                    Every birthday is the start of a brand-new story. This one is going to be filled with surprises, laughter, and dreams coming true!
+                </p>
+                <div class="text-8xl text-primary-color">
+                    <button style="background-color:pink;" id="confetti-button"
+                        class="confetti-button py-3 px-6 rounded-full bg-primary-color text-white font-bold transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        CELEBRATE! 🎉
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Navigation Bar -->
+    <!-- Reduced spacing on mobile to prevent overflow -->
+    <nav
+        class="fixed top-0 left-0 w-full bg-white bg-opacity-25 backdrop-blur-md p-4 flex justify-center items-center space-x-2 sm:space-x-4 z-1000">
+        <a class="nav-link text-xs sm:text-sm md:text-base font-light hover:text-primary-color transition-colors"
+            href="#home">Home</a>
+        <a class="nav-link text-xs sm:text-sm md:text-base font-light hover:text-primary-color transition-colors"
+            href="#about">About</a>
+        <a class="nav-link text-xs sm:text-sm md:text-base font-light hover:text-primary-color transition-colors"
+            href="#wishes-section">Wishes</a>
+        <a class="nav-link text-xs sm:text-sm md:text-base font-light hover:text-primary-color transition-colors"
+            href="#gallery">Gallery</a>
+        <a class="nav-link text-xs sm:text-sm md:text-base font-light hover:text-primary-color transition-colors"
+            href="#more-wishes">More Wishes</a>
+        <a class="nav-link text-xs sm:text-sm md:text-base font-light hover:text-primary-color transition-colors"
+            href="#countdown">Countdown</a>
+        <a class="nav-link text-xs sm:text-sm md:text-base font-light hover:text-primary-color transition-colors"
+            href="#surprise">Surprise</a>
+    </nav>
+
+    <!-- Footer -->
+    <footer class="w-full text-center p-4 mt-8 text-gray-500 text-sm">
+        <p>Made with ❤️ by M Baqir.</p>
+    </footer>
+
+    <script>
+        // JavaScript for all animations and interactivity
+
+        // Particle animation background
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 150; i++) { // Adjusted number of particles
+                particles.push(new Particle());
+            }
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function Particle() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 3 + 1; // Adjusted size
+            this.speedX = Math.random() * 0.5 - 0.25; // Adjusted speed
+            this.speedY = Math.random() * 0.5 - 0.25; // Adjusted speed
+            this.color = ['#E2A3B3', '#D4AF37', '#F5E8C7'][Math.floor(Math.random() * 3)]; // New colors
+        }
+
+        Particle.prototype.update = function () {
+            this.x += this.speedX;
+            this.y += this.speedY;
+
+            if (this.size > 0.2) this.size -= 0.005;
+            if (this.x < 0 || this.x > canvas.width) this.speedX = -this.speedX;
+            if (this.y < 0 || this.y > canvas.height) this.speedY = -this.speedY;
+        };
+
+        Particle.prototype.draw = function () {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        };
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Countdown Timer
+        // Corrected birthday date and time for August 10, 2006
+        const birthday = new Date("2006-08-10T00:00:00");
+        setInterval(() => {
+            const now = new Date();
+            const diff = now - birthday;
+
+            // This logic correctly calculates the time passed since the birthday
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById("timer").innerText =
+                `It's been ${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds since your birthday! 🎉`;
+
+        }, 1000);
+
+        // Intersection Observer for section animations
+        const sections = document.querySelectorAll('.animated-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Highlight nav link
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${entry.target.id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, {
+            threshold: 0.4, // Trigger when 40% of the section is visible
+            rootMargin: '0px 0px -40% 0px' // Adjust root margin for better highlight timing
+        });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Confetti animation logic for the surprise button
+        const confettiButton = document.getElementById('confetti-button');
+        confettiButton.addEventListener('click', () => {
+            // New, beautiful confetti animation from the library
+            confetti({
+                particleCount: 200,
+                spread: 180,
+                startVelocity: 60,
+                scalar: 1.2,
+                colors: ['#E2A3B3', '#D4AF37', '#F5E8C7'],
+                origin: {
+                    y: 0.8,
+                    x: 0.5
+                }
+            });
+        });
+
+        // Gallery carousel logic
+        const carouselTrack = document.getElementById('carousel-track');
+        const totalSlides = document.querySelectorAll('.carousel-image-wrapper').length;
+        let currentSlide = 0;
+        const slideInterval = 3000; // Time in milliseconds between slides
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            carouselTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        setInterval(nextSlide, slideInterval);
+    </script>
+</body>
+
+</html>
